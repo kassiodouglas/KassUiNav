@@ -1,0 +1,60 @@
+<ul #links class="links {{theme}}">
+
+  <li ngbDropdown #myDrop="ngbDropdown" *ngIf="link.path && !usePermissions || usePermissions && link.path && checkPermission(link.permissions)" class="btn-link-area">
+
+    <button ngbDropdownAnchor  class="btn-link" [routerLink]="link.path" (contextmenu)="openMenu($event, myDrop)">
+      <div class="label-area">
+        <div *ngIf="link.icon" [innerHTML]="link.icon" class="icon"></div>
+
+        <div *ngIf="isInFavArea && link.parent; else onlyLabel" class="d-flex flex-column text-start">
+          <div class="opacity-50" style="font-size: .6rem">{{link.parent}}</div>
+          <div>{{link.label}}</div>
+        </div>
+
+        <ng-template #onlyLabel>{{link.label}}</ng-template>
+
+      </div>
+    </button>
+
+    <i *ngIf="!link.favArea && useFav" class="pointer fa-star starfav" [ngClass]="{'active':link.isfav, 'fa-solid':link.isfav, 'fa-regular':!link.isfav}" [id]="linkId" (click)="setFav(link)"></i>
+
+    <div ngbDropdownMenu class="drop-menu drop_{{linkId}}" *ngIf="isInFavArea">
+      <button class="btn btn-sm" ngbDropdownItem (click)="removeFav(link)"> <i class="fa-solid fa-xmark text-danger me-3"></i> Remover</button>
+    </div>
+
+  </li>
+
+
+
+
+  <li *ngIf="link.divider" class="">
+    <div class='divider'>{{link.divider}}</div>
+  </li>
+
+
+
+
+  <li *ngIf="link.id && !usePermissions || usePermissions && link.id && checkPermission(link.permissions)" class="area-sub">
+
+    <button (click)="arrow()" class="btn-expand" [ngClass]="{'active':arrowActive}">
+      <div class="label-area">
+        <div *ngIf="link.icon" [innerHTML]="link.icon" class="icon"></div>
+        {{link.label}}
+      </div>
+      <span class='arrow' [ngClass]="arrowActive? 'active':''"><i class="fa-solid fa-chevron-down small"></i></span>
+    </button>
+
+    <div class="" id="{{link.id}}">
+      <ul class="links-sub" [ngClass]="{'hide-submenu': !arrowActive}">
+
+        <li *ngFor="let sub of link.links">
+          <linker [useFav]="useFav" [link]="sub" [theme]="theme" [permissions]="permissions" [usePermissions]="usePermissions"></linker>
+        </li>
+
+      </ul>
+    </div>
+
+  </li>
+
+
+</ul>

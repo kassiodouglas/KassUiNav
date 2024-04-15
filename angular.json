@@ -3,5 +3,41 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "KassUiNav-lib": {
+      "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {"style": "scss"}
+      },
+      "root": "projects/kass-ui-nav-lib",
+      "sourceRoot": "projects/kass-ui-nav-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/kass-ui-nav-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/kass-ui-nav-lib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/kass-ui-nav-lib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/kass-ui-nav-lib/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,78 @@
+<div class="container-backdrop animate__animated {{position}}" [ngClass]="{
+  'show':show,
+  'animate__fadeIn':showing,
+  'animate__fadeOut':hiding,
+  }" (click)="closeBackdropMenu($event)">
+
+
+  <div class="container-menu animate__animated {{theme}}" [ngClass]="{
+    'withFixed':favorite_links.length>0,
+    'animate__fadeInLeft':showing&&position=='left',
+    'animate__fadeOutLeft':hiding&&position=='left',
+    'animate__fadeInRight':showing&&position=='right',
+    'animate__fadeOutRight':hiding&&position=='right',
+    'animate__fadeInUp':showing&&position=='center',
+    'animate__fadeOutDown':hiding&&position=='center',
+    }" (click)="$event.stopPropagation()">
+
+    <button class="position-absolute top-0 end-0 btn btn-dark border-0 bg-transparent rounded-circle small fs-6" (click)="closeContainerMenu($event)"><i class="fa-solid fa-xmark"></i></button>
+
+    <header *ngIf="header!==null" class="mb-3">
+
+      <div *ngIf="!headerIsComponent, else headerContainer" [innerHTML]="header"></div>
+      <ng-template #headerContainer>
+        <div style="width: 100%;"><ng-container #containerHeader></ng-container></div>
+      </ng-template>
+
+      <hr>
+
+    </header>
+
+    <div class="mb-3 info" id="area-search" *ngIf="search">
+      <div class="form-search">
+        <i class="fas fa-search icon-search"></i> <input type="search" placeholder="pesquisar link..."
+          (keyup)="searchLinks()" (input)="searchLinks()" [(ngModel)]="filter_link">
+      </div>
+    </div>
+
+    <div id="body" [ngClass]="{'withFixed':favorite_links.length>0}" [style.height]="bodyHeight">
+
+      <div id="body-links" [ngClass]="{'withFixed':favorite_links.length>0, 'order-2':position=='right'}">
+
+        <div *ngFor="let xlink of links_list">
+          <linker [useFav]="useFav" [link]="xlink" [theme]="theme" [permissions]="permissions"
+            [usePermissions]="usePermissions"></linker>
+        </div>
+
+      </div>
+
+      <div id="body-fixeds" [ngClass]="{'show':favorite_links.length>0,'order-1':position=='right'}">
+        <div class="mb-3 opacity-50">Links Fixados ({{favorite_links.length}})</div>
+
+        <div class="links">
+          <span *ngFor="let zlink of favorite_links" class="w-100">
+            <linker [useFav]="useFav" [link]="zlink" [theme]="theme" [permissions]="permissions"
+              [usePermissions]="usePermissions" [isInFavArea]="true"></linker>
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+<button class="arrow-open position-absolute btn top-0 btn-light px-1 py-5 small animate__animated opacity-50 rounded-0" style="height: 100% !important;"
+ [ngClass]="{
+  'animate__fadeOutLeft':showing&&position=='left'|| showing&&position=='center',
+  'animate__fadeInLeft animate__faster start-0':!hiding&&position=='left' || !hiding&&position=='center',
+  'animate__fadeOutRight':showing&&position=='right',
+  'animate__fadeInRight animate__faster end-0':!hiding&&position=='right'
+  }" (click)="openMenu()">
+ <i *ngIf="position=='left'||position=='center'" class="fa-solid fa-chevron-right"></i>
+ <i *ngIf="position=='right'" class="fa-solid fa-chevron-left"></i>
+</button>
